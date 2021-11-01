@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int searchInsert(int* nums, int numsSize, int target){
-    int down = 0, up = numsSize - 1, mid=0;
+    int down = 0, up = numsSize - 1, mid = 0;
     while (down <= up){
         mid = (down + up) / 2;
         if (target == nums[mid]) return mid;
