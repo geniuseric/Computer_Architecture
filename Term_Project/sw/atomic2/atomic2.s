@@ -19,12 +19,12 @@ again:
     lw t1, size                # load word of string size
 
 critical:  
-    lw t0, 0(s2)           # load word
-    sw t0, 28(s1)          # print word
-    addi t1, t1, -1        # size = size - 1
-    beq t1, x0, end        # jump to end
-    addi s2, s2, 4         # address = address + 4
-    j critical             # jump to critical
+    lw t0, 0(s2)               # load word
+    sw t0, 28(s1)              # print word
+    addi t1, t1, -1            # size = size - 1
+    beq t1, x0, end            # jump to end
+    addi s2, s2, 4             # address = address + 4
+    j critical                 # jump to critical
 
 end:
     amoswap.w.rl x0, x0, (s0)  # release lock
