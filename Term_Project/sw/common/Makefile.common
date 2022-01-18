@@ -1,0 +1,33 @@
+rv32c   ?= 0
+
+ifndef CROSS_COMPILE
+export CROSS_COMPILE = riscv-none-embed-
+endif
+
+CC      := $(CROSS_COMPILE)gcc
+AS      := $(CROSS_COMPILE)as
+AR      := $(CROSS_COMPILE)ar
+OBJDUMP := $(CROSS_COMPILE)objdump
+OBJCOPY := $(CROSS_COMPILE)objcopy
+READELF := $(CROSS_COMPILE)readelf
+
+RV32_CC = $(CROSS_COMPILE)gcc
+RV32_CC := $(shell which $(RV32_CC))
+ifndef RV32_CC
+$(error "no $(CROSS_COMPILE)gcc found.")
+endif
+
+RV32_CC2 = $(shell echo | $(CROSS_COMPILE)cpp -dM - | grep __riscv && echo 1)
+ifeq ("$(RV32_CC2)","")
+$(error "no valid GNU toolchain for RISC-V found.")
+endif
+
+ifeq ($(rv32c), 1)
+ARCH    := -march=rv32imac -mabi=ilp32
+else
+ARCH    := -march=rv32ima -mabi=ilp32
+endif
+
+CFLAGS  := -O3 -Wall $(ARCH) -nostartfiles -nostdlib
+ASFLAGS := $(ARCH)
+LDFLAGS := -lc -lm -lgcc -lsys
